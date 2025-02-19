@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skincare Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Azo+Sans&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Azo Sans', sans-serif;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url('imagens/fundo.jpg') no-repeat center center/cover;
+            text-align: center;
+            overflow: hidden; /* Evita rolagem desnecessária na tela inicial */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.85); /* Fundo semi-transparente */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto; /* Permite rolagem dentro do container */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            background: #f0f0f0;
+            border-radius: 5px;
+            width: 100%;
+            justify-content: start;
+            text-align: left;
+        }
+
+        .option:hover {
+            background: #ddd;
+        }
+
+        .option img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 10px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Adiciona rolagem na página inteira quando necessário */
+        @media (max-width: 600px) {
+            body {
+                height: auto;
+                overflow-y: auto;
+                display: block;
+            }
+
+            .container {
+                max-height: none;
+                height: auto;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="content">
+        <h1>Qual é a Rotina de skincare para a sua pele?</h1>
+        <p>Faça o teste agora, descubra seu tipo de pele e a rotina ideal para ela! É rapidinho!</p>
+        <button class="btn" onclick="nextQuestion()">Iniciar</button>
+    </div>
+
+    <script>
+        let step = 0;
+
+        function nextQuestion(selectedOption) {
+            const content = document.getElementById('content');
+
+            if (step === 0) {
+                content.innerHTML = `
+                    <h2>Qual nome podemos te chamar?</h2>
+                    <input type="text" id="name" placeholder="Digite seu nome" />
+                    <button class="btn" onclick="nextQuestion()">Próximo</button>
+                `;
+            } else if (step === 1) {
+                content.innerHTML = `
+                    <h2>Qual sua idade?</h2>
+                    <div class="options">
+                        ${['Menos de 18 anos', '18 a 24 anos', '25 a 29 anos', '30 a 39 anos', '40 a 49 anos', '50 a 59 anos', '60+']
+                            .map((age, index) => `<div class="option" onclick="nextQuestion(${index})">${age}</div>`).join('')}
+                    </div>
+                `;
+            } else if (step === 2) {
+                content.innerHTML = `
+                    <h2>Qual seu tipo de pele?</h2>
+                    <div class="options">
+                        ${['Normal', 'Seca', 'Oleosa', 'Mista', 'Sensível']
+                            .map((type, index) => `
+                                <div class="option" onclick="nextQuestion(${index})">
+                                    <img src="imagens/imagem${index + 1}.jpg" alt="${type}" /> ${type}
+                                </div>
+                            `).join('')}
+                    </div>
+                `;
+            } else if (step === 3) {
+                content.innerHTML = `
+                    <h2>Qual o desafio da sua pele?</h2>
+                    <div class="options">
+                        ${[
+                            'Acne', 'Oleosidade / excesso de brilho', 'Rugas / Linhas de expressão / Flacidez do rosto',
+                            'Rosácea / Sensibilidade extrema / irritação recorrente', 'Manchas escuras / Melasma',
+                            'Cicatrizes de acne', 'Ressecamento / descamação', 'Poros dilatados', 'Textura irregular',
+                            'Olheiras abaixo dos olhos', 'Bolsas abaixo dos olhos'
+                        ]
+                            .map((challenge, index) => `
+                                <div class="option" onclick="nextQuestion(${index})">
+                                    <img src="imagens/imagem${index + 6}.jpg" alt="${challenge}" /> ${challenge}
+                                </div>
+                            `).join('')}
+                    </div>
+                `;
+            } else {
+                content.innerHTML = '<h2>Obrigado por participar!</h2>';
+            }
+            step++;
+
+            // Força rolagem para o topo sempre que mudar de pergunta
+            content.scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
